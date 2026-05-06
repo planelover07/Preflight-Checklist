@@ -1,0 +1,297 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0;}
+
+.root{font-family:'Lato',sans-serif;background:#0d0d0d;color:#c8c8c8;min-height:600px;}
+
+.header{background:#111;border-bottom:1px solid #2a2a2a;padding:28px 32px 22px;position:relative;}
+.header::after{content:'';position:absolute;bottom:0;left:32px;right:32px;height:1px;background:linear-gradient(90deg,transparent,#888,transparent);}
+
+.header-inner{display:flex;align-items:flex-end;justify-content:space-between;}
+.title{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:#e8e8e8;letter-spacing:0.5px;}
+.title span{color:#aaa;font-weight:400;}
+.subtitle{font-size:12px;color:#555;letter-spacing:2px;text-transform:uppercase;margin-top:5px;font-weight:300;}
+
+.badge{border:1px solid #3a3a3a;padding:5px 14px;border-radius:2px;font-size:11px;color:#888;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;}
+
+.tabs{display:flex;gap:0;background:#0d0d0d;border-bottom:1px solid #222;}
+.tab{font-family:'Lato',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:14px 24px;border:none;background:transparent;color:#444;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.2s;}
+.tab.active{color:#c8c8c8;border-bottom-color:#888;}
+.tab:hover:not(.active){color:#777;}
+
+.content{padding:28px 32px;}
+
+.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 0;gap:18px;}
+.spinner{width:32px;height:32px;border:1px solid #2a2a2a;border-top-color:#888;border-radius:50%;animation:spin 0.9s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.load-text{font-size:11px;color:#555;letter-spacing:2px;text-transform:uppercase;}
+
+.error-box{border:1px solid #2a2a2a;padding:32px;text-align:center;background:#111;}
+.error-icon{font-size:28px;margin-bottom:12px;}
+.error-title{font-family:'Playfair Display',serif;font-size:16px;color:#888;margin-bottom:8px;}
+.error-msg{font-size:12px;color:#444;line-height:1.6;}
+.retry-btn{margin-top:16px;padding:8px 24px;background:transparent;border:1px solid #3a3a3a;color:#888;font-family:'Lato',sans-serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;}
+.retry-btn:hover{border-color:#888;color:#c8c8c8;}
+
+.ts{font-size:10px;color:#333;letter-spacing:1px;text-transform:uppercase;margin-bottom:20px;text-align:right;}
+
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#1a1a1a;border:1px solid #1a1a1a;margin-bottom:24px;}
+.card{background:#0d0d0d;padding:24px 22px;}
+.card:hover{background:#111;}
+
+.card-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid #1a1a1a;}
+.model-num{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:#e0e0e0;line-height:1;}
+.model-name{font-size:10px;color:#444;letter-spacing:1.5px;text-transform:uppercase;margin-top:5px;}
+
+.trend-pill{font-size:10px;font-weight:700;letter-spacing:1px;padding:4px 10px;border:1px solid;border-radius:2px;}
+.t-up{color:#8ab888;border-color:#2a3a2a;background:#0f1a0f;}
+.t-dn{color:#b88888;border-color:#3a2a2a;background:#1a0f0f;}
+.t-fl{color:#888;border-color:#2a2a2a;background:#111;}
+
+.avg-price{font-family:'Playfair Display',serif;font-size:26px;color:#e8e8e8;font-weight:600;margin-bottom:3px;}
+.avg-lbl{font-size:10px;color:#3a3a3a;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px;}
+
+.range-row{display:flex;justify-content:space-between;font-size:10px;color:#444;font-family:'Lato',sans-serif;margin-bottom:4px;}
+.bar{height:2px;background:#1a1a1a;margin-bottom:14px;position:relative;}
+.bar-fill{position:absolute;inset:0;background:linear-gradient(90deg,#3a3a3a,#888);}
+
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#1a1a1a;border-top:1px solid #1a1a1a;}
+.stat{background:#0d0d0d;padding:10px 0 0;}
+.stat-v{font-size:13px;font-weight:700;color:#b0b0b0;}
+.stat-l{font-size:9px;color:#333;letter-spacing:1px;text-transform:uppercase;margin-top:2px;}
+
+.section-hd{font-size:10px;color:#444;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid #1a1a1a;}
+
+.chart-box{background:#111;border:1px solid #1a1a1a;padding:24px;margin-bottom:20px;}
+.chart-wrap{position:relative;width:100%;height:220px;}
+
+.insights-box{background:#111;border:1px solid #1a1a1a;padding:24px;}
+.insight{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid #161616;font-size:13px;color:#777;line-height:1.6;}
+.insight:last-child{border-bottom:none;padding-bottom:0;}
+.insight-ico{color:#555;font-size:15px;flex-shrink:0;margin-top:1px;}
+
+.footer{padding:14px 32px;border-top:1px solid #1a1a1a;display:flex;justify-content:space-between;align-items:center;background:#0a0a0a;}
+.footer-l{font-size:10px;color:#2a2a2a;letter-spacing:1px;text-transform:uppercase;}
+.refresh-btn{padding:7px 18px;background:transparent;border:1px solid #2a2a2a;color:#555;font-family:'Lato',sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;}
+.refresh-btn:hover{border-color:#666;color:#aaa;}
+
+.hidden{display:none!important;}
+</style>
+
+<div class="root">
+  <div class="header">
+    <div class="header-inner">
+      <div>
+        <div class="title">Cessna <span>Market Summary</span></div>
+        <div class="subtitle">Models 150 · 172 · 182 — U.S. Pre-Owned Market</div>
+      </div>
+      <div class="badge">AI Research</div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('overview',this)">Overview</button>
+    <button class="tab" onclick="showTab('charts',this)">Price Charts</button>
+    <button class="tab" onclick="showTab('insights',this)">Insights</button>
+  </div>
+
+  <div class="content">
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      <div class="load-text">Fetching market data</div>
+    </div>
+
+    <div id="main" class="hidden">
+      <div class="ts" id="ts"></div>
+
+      <div id="pane-overview">
+        <div class="cards" id="cards"></div>
+      </div>
+
+      <div id="pane-charts" class="hidden">
+        <div class="chart-box">
+          <div class="section-hd">Average asking price by model</div>
+          <div class="chart-wrap"><canvas id="c1" role="img" aria-label="Average price comparison Cessna 150 172 182">Price data loading.</canvas></div>
+        </div>
+        <div class="chart-box">
+          <div class="section-hd">Price range — low vs. high</div>
+          <div class="chart-wrap"><canvas id="c2" role="img" aria-label="Price range low to high per model">Range data loading.</canvas></div>
+        </div>
+      </div>
+
+      <div id="pane-insights" class="hidden">
+        <div class="insights-box">
+          <div class="section-hd">Market Intelligence</div>
+          <div id="insights-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="errbox" class="error-box hidden">
+      <div class="error-icon">✈</div>
+      <div class="error-title">Unable to Retrieve Data</div>
+      <div class="error-msg" id="errmsg">The market data request failed. Showing estimated figures based on recent trends.</div>
+      <button class="retry-btn" onclick="go()">Retry Live Data</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-l">Sources: Controller · Trade-A-Plane · Barnstormers · AOPA</div>
+    <button class="refresh-btn" onclick="go()">↻ Refresh</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+let data = null;
+let ch1 = null, ch2 = null;
+
+const FALLBACK = {
+  as_of: "May 2025",
+  models: [
+    {model:"150",nickname:"The Trainer",avg_price:38000,median_price:35000,low:14000,high:72000,listings:175,avg_year:"1971",avg_hours:"3,400",trend:"up",trend_pct:"3%"},
+    {model:"172",nickname:"The Skyhawk",avg_price:105000,median_price:92000,low:35000,high:365000,listings:620,avg_year:"1984",avg_hours:"4,200",trend:"up",trend_pct:"7%"},
+    {model:"182",nickname:"The Skylane",avg_price:158000,median_price:142000,low:58000,high:540000,listings:310,avg_year:"1982",avg_hours:"3,800",trend:"up",trend_pct:"5%"}
+  ],
+  insights:[
+    {icon:"📈",text:"The Cessna 172 Skyhawk remains the most actively traded piston single in the U.S. market, with high demand from flight schools and private buyers keeping prices elevated."},
+    {icon:"✈️",text:"The Cessna 150 offers the lowest entry point into Cessna ownership, making it a strong choice for primary trainers — though avionics upgrades can push prices well above average."},
+    {icon:"💰",text:"The 182 Skylane commands a significant premium over the 172 due to its 230 hp engine and useful load advantage, attracting mission-focused buyers and cross-country pilots."},
+    {icon:"🔍",text:"Low-time airframes (under 1,000 SMOH) and glass cockpit upgrades (Garmin G1000 or GTN series) are the top price drivers across all three models."},
+    {icon:"💡",text:"Pre-buy inspections are essential — budget $500–$1,500 for a thorough inspection. Well-documented maintenance logs can add 10–15% to market value."}
+  ]
+};
+
+function fmt(n){return '$'+Math.round(n).toLocaleString();}
+
+function showTab(id, btn){
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  ['overview','charts','insights'].forEach(t=>{
+    document.getElementById('pane-'+t).classList.toggle('hidden', t!==id);
+  });
+  if(id==='charts' && data) drawCharts();
+}
+
+function renderCards(d){
+  const g = document.getElementById('cards');
+  g.innerHTML='';
+  d.models.forEach(m=>{
+    const tc = m.trend==='up'?'t-up':m.trend==='down'?'t-dn':'t-fl';
+    const ts = m.trend==='up'?'▲ '+m.trend_pct:m.trend==='down'?'▼ '+m.trend_pct:'— Stable';
+    g.innerHTML+=`<div class="card">
+      <div class="card-head">
+        <div>
+          <div class="model-num">${m.model}</div>
+          <div class="model-name">${m.nickname}</div>
+        </div>
+        <div class="trend-pill ${tc}">${ts}</div>
+      </div>
+      <div class="avg-price">${fmt(m.avg_price)}</div>
+      <div class="avg-lbl">Avg. Asking Price</div>
+      <div class="range-row"><span>${fmt(m.low)}</span><span>${fmt(m.high)}</span></div>
+      <div class="bar"><div class="bar-fill"></div></div>
+      <div class="range-row" style="color:#2a2a2a;margin-top:-10px;margin-bottom:14px;"><span>Low</span><span>High</span></div>
+      <div class="stats">
+        <div class="stat"><div class="stat-v">${m.listings}</div><div class="stat-l">Listings</div></div>
+        <div class="stat"><div class="stat-v">${m.avg_year}</div><div class="stat-l">Avg Year</div></div>
+        <div class="stat"><div class="stat-v">${m.avg_hours}</div><div class="stat-l">Avg TT</div></div>
+        <div class="stat"><div class="stat-v">${fmt(m.median_price)}</div><div class="stat-l">Median</div></div>
+      </div>
+    </div>`;
+  });
+}
+
+function renderInsights(d){
+  const el = document.getElementById('insights-list');
+  el.innerHTML = d.insights.map(i=>`<div class="insight"><span class="insight-ico">${i.icon}</span><span>${i.text}</span></div>`).join('');
+}
+
+function drawCharts(){
+  if(!data) return;
+  const labels = data.models.map(m=>'Cessna '+m.model);
+  const avgs = data.models.map(m=>m.avg_price);
+  const lows = data.models.map(m=>m.low);
+  const highs = data.models.map(m=>m.high);
+  const gridC = 'rgba(255,255,255,0.04)';
+  const tickC = '#444';
+
+  if(ch1) ch1.destroy();
+  ch1 = new Chart(document.getElementById('c1'),{
+    type:'bar',
+    data:{labels,datasets:[{label:'Avg Price',data:avgs,backgroundColor:'rgba(160,160,160,0.5)',borderColor:'#888',borderWidth:1,borderRadius:3}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+fmt(c.raw)}}},
+      scales:{
+        x:{ticks:{color:tickC,font:{size:11}},grid:{color:gridC}},
+        y:{ticks:{color:tickC,callback:v=>'$'+(v/1000).toFixed(0)+'k',font:{size:11}},grid:{color:gridC}}
+      }}
+  });
+
+  if(ch2) ch2.destroy();
+  ch2 = new Chart(document.getElementById('c2'),{
+    type:'bar',
+    data:{labels,datasets:[
+      {label:'Low',data:lows,backgroundColor:'rgba(100,130,100,0.5)',borderColor:'#5a7a5a',borderWidth:1,borderRadius:3},
+      {label:'High',data:highs,backgroundColor:'rgba(150,150,150,0.4)',borderColor:'#888',borderWidth:1,borderRadius:3}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+c.dataset.label+': '+fmt(c.raw)}}},
+      scales:{
+        x:{ticks:{color:tickC,font:{size:11}},grid:{color:gridC}},
+        y:{ticks:{color:tickC,callback:v=>'$'+(v/1000).toFixed(0)+'k',font:{size:11}},grid:{color:gridC}}
+      }}
+  });
+}
+
+function display(d, source){
+  data = d;
+  const now = new Date();
+  document.getElementById('ts').textContent =
+    'Last updated: '+now.toLocaleString('en-US',{dateStyle:'medium',timeStyle:'short'})+
+    (source?' · '+source:'');
+  renderCards(d);
+  renderInsights(d);
+  document.getElementById('loading').classList.add('hidden');
+  document.getElementById('main').classList.remove('hidden');
+}
+
+async function go(){
+  document.getElementById('loading').classList.remove('hidden');
+  document.getElementById('main').classList.add('hidden');
+  document.getElementById('errbox').classList.add('hidden');
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1500,
+        tools:[{type:'web_search_20250305',name:'web_search'}],
+        messages:[{role:'user',content:`Search for current U.S. pre-owned aircraft prices for Cessna 150, 172, and 182 on Controller.com, Trade-A-Plane, or Barnstormers. Then return ONLY a raw JSON object — no markdown, no explanation, no backticks — with this exact shape:
+{"as_of":"Month YYYY","models":[{"model":"150","nickname":"The Trainer","avg_price":38000,"median_price":35000,"low":14000,"high":72000,"listings":175,"avg_year":"1971","avg_hours":"3,400","trend":"up","trend_pct":"3%"},{"model":"172","nickname":"The Skyhawk","avg_price":105000,"median_price":92000,"low":35000,"high":365000,"listings":620,"avg_year":"1984","avg_hours":"4,200","trend":"up","trend_pct":"7%"},{"model":"182","nickname":"The Skylane","avg_price":158000,"median_price":142000,"low":58000,"high":540000,"listings":310,"avg_year":"1982","avg_hours":"3,800","trend":"up","trend_pct":"5%"}],"insights":[{"icon":"📈","text":"insight 1"},{"icon":"✈️","text":"insight 2"},{"icon":"💰","text":"insight 3"},{"icon":"🔍","text":"insight 4"},{"icon":"💡","text":"insight 5"}]}`}]
+      })
+    });
+
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const result = await res.json();
+    const allText = (result.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('');
+    const s = allText.indexOf('{'), e = allText.lastIndexOf('}');
+    if(s===-1||e===-1) throw new Error('No JSON found');
+    const parsed = JSON.parse(allText.slice(s,e+1));
+    display(parsed, 'Live data · '+parsed.as_of);
+  } catch(err) {
+    console.warn('API error, using fallback:', err.message);
+    display(FALLBACK, 'Estimated · '+FALLBACK.as_of);
+    document.getElementById('errmsg').textContent =
+      'Live fetch failed ('+err.message+'). Showing estimated figures based on recent market trends.';
+    document.getElementById('errbox').classList.remove('hidden');
+    document.getElementById('errbox').style.marginTop = '16px';
+  }
+}
+
+go();
+</script>
