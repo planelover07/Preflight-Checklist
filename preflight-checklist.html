@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preflight Safety Checklist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c0e;
+    --panel: #14171a;
+    --panel-raised: #1b1f23;
+    --hairline: #2a2f34;
+    --silver: #9aa4ac;
+    --silver-bright: #d6dce1;
+    --white: #f2f5f7;
+    --red: #e25555;
+    --red-dim: #a04a4a;
+    --green: #6fae7d;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: radial-gradient(ellipse at top, #12151a 0%, #08090b 70%);
+    color: var(--white);
+    font-family: 'IBM Plex Sans', sans-serif;
+    min-height: 100vh;
+    padding: 32px 16px 64px;
+  }
+
+  .wrap { max-width: 640px; margin: 0 auto; }
+
+  /* ---- Header / Gauge ---- */
+  header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--hairline);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .gauge {
+    position: relative;
+    width: 84px;
+    height: 84px;
+    flex-shrink: 0;
+  }
+
+  .gauge svg { transform: rotate(-90deg); }
+
+  .gauge circle.track {
+    fill: none;
+    stroke: #202429;
+    stroke-width: 6;
+  }
+
+  .gauge circle.fill {
+    fill: none;
+    stroke: var(--silver-bright);
+    stroke-width: 6;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.4s ease, stroke 0.4s ease;
+  }
+
+  .gauge-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .gauge-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .gauge-den {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--silver);
+    letter-spacing: 0.05em;
+  }
+
+  .title-block h1 {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    letter-spacing: 0.02em;
+    margin: 0 0 4px;
+    color: var(--white);
+  }
+
+  .title-block p {
+    margin: 0;
+    font-size: 12.5px;
+    color: var(--silver);
+    letter-spacing: 0.03em;
+  }
+
+  /* ---- Cessna 150 accents ---- */
+  .ambient-plane {
+    position: absolute;
+    bottom: 2px;
+    left: -12%;
+    width: 64px;
+    height: 32px;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1;
+    animation: ambientFly 14s linear infinite;
+    animation-delay: 1s;
+  }
+
+  @keyframes ambientFly {
+    0%   { left: -12%; opacity: 0; transform: translateY(0) rotate(0deg); }
+    5%   { opacity: 0.55; }
+    50%  { transform: translateY(-4px) rotate(-2deg); }
+    95%  { opacity: 0.55; }
+    100% { left: 103%; opacity: 0; transform: translateY(2px) rotate(1deg); }
+  }
+
+  .section { position: relative; }
+
+  .flyover-plane {
+    position: absolute;
+    top: 10px;
+    left: -10%;
+    width: 52px;
+    height: 26px;
+    z-index: 3;
+    pointer-events: none;
+    opacity: 0;
+    animation: sectionFly 20s linear infinite;
+  }
+
+  @keyframes sectionFly {
+    0%   { left: -10%; opacity: 0; transform: translateY(0) rotate(0deg); }
+    2%   { opacity: 0.55; }
+    10%  { transform: translateY(-3px) rotate(-2.5deg); }
+    18%  { opacity: 0.55; }
+    20%  { left: 102%; opacity: 0; transform: translateY(1px) rotate(1deg); }
+    100% { left: 102%; opacity: 0; }
+  }
+
+  .takeoff-plane {
+    position: fixed;
+    left: -150px;
+    bottom: 16%;
+    width: 120px;
+    height: 60px;
+    z-index: 60;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  .takeoff-plane.fly {
+    animation: takeoff 3.4s cubic-bezier(0.3, 0.1, 0.4, 1) forwards;
+  }
+
+  @keyframes takeoff {
+    0%   { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+    8%   { opacity: 1; }
+    45%  { transform: translate(55vw, -6vh) rotate(-7deg); }
+    90%  { opacity: 1; }
+    100% { transform: translate(130vw, -44vh) rotate(-11deg); opacity: 0; }
+  }
+
+  /* Shared Cessna 150 drawing */
+  .c150 {
+    display: block;
+    width: 100%;
+    height: 100%;
+    --plane-stroke: var(--silver);
+  }
+
+  .c150 path,
+  .c150 line,
+  .c150 circle,
+  .c150 ellipse {
+    stroke: var(--plane-stroke);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+    transition: stroke 0.5s ease, fill 0.5s ease;
+  }
+
+  .c150 .wing, .c150 .stab { stroke-width: 2.2; }
+  .c150 .glass { stroke-width: 2; opacity: 0.5; }
+  .c150 .strut { stroke-width: 2; }
+  .c150 .gear-leg { stroke-width: 2.4; }
+  .c150 .wheel { stroke-width: 2.6; }
+  .c150 .spinner { fill: var(--plane-stroke); stroke: none; }
+  .c150 .prop-disc { fill: var(--plane-stroke); stroke: none; opacity: 0.14; }
+
+  .c150 .prop-blade {
+    stroke-width: 2.4;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: propSpin 0.13s linear infinite;
+  }
+
+  @keyframes propSpin {
+    0%, 100% { transform: scaleY(1); opacity: 0.9; }
+    50%      { transform: scaleY(0.12); opacity: 0.5; }
+  }
+
+  .c150 circle.beacon {
+    fill: var(--red);
+    stroke: none;
+    animation: beaconPulse 1.5s ease-out infinite;
+  }
+
+  @keyframes beaconPulse {
+    0%, 100% { opacity: 0.12; }
+    8%       { opacity: 1; }
+    26%      { opacity: 0.12; }
+  }
+
+  .section.complete .c150 { --plane-stroke: var(--green); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ambient-plane, .flyover-plane, .takeoff-plane { animation: none; display: none; }
+  }
+
+  /* ---- Sections ---- */
+  .section {
+    margin-bottom: 22px;
+    background: var(--panel);
+    border: 1px solid var(--hairline);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 16px;
+    background: var(--panel-raised);
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .section-head-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: #0a0c0e;
+    background: var(--silver-bright);
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+
+  .section-head h2 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16.5px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin: 0;
+    color: var(--silver-bright);
+  }
+
+  .section-count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    color: var(--silver);
+  }
+
+  .items { padding: 6px 0; }
+
+  .item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 13px 16px;
+    min-height: 48px;
+    border-bottom: 1px solid #1c2024;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition: background 0.15s ease;
+  }
+
+  .item:last-child { border-bottom: none; }
+  .item:hover { background: #191d21; }
+
+  .checkbox {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    border: 1.5px solid var(--silver);
+    flex-shrink: 0;
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    background: #101316;
+  }
+
+  .checkbox svg {
+    width: 14px;
+    height: 14px;
+    opacity: 0;
+    transition: opacity 0.12s ease;
+  }
+
+  .item.checked .checkbox {
+    background: var(--silver-bright);
+    border-color: var(--silver-bright);
+  }
+
+  .item.checked .checkbox svg { opacity: 1; }
+  .item.checked .checkbox svg path { stroke: #0a0c0e; }
+
+  .item-text { flex: 1; padding-top: 2px; }
+
+  .item-label {
+    font-size: 14.5px;
+    color: var(--white);
+    line-height: 1.4;
+    transition: color 0.15s ease;
+  }
+
+  .item.checked .item-label {
+    color: var(--silver);
+    text-decoration: line-through;
+    text-decoration-color: #3a4046;
+  }
+
+  .item-note {
+    font-size: 12px;
+    color: var(--silver);
+    margin-top: 2px;
+    line-height: 1.4;
+  }
+
+  .item.critical .item-note { color: var(--red-dim); }
+  .item.critical { box-shadow: inset 2px 0 0 var(--red-dim); }
+  .item.critical .checkbox { border-color: var(--red-dim); }
+
+  .critical-flag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    color: var(--red);
+    border: 1px solid var(--red-dim);
+    padding: 1px 5px;
+    border-radius: 3px;
+    letter-spacing: 0.06em;
+    margin-left: 8px;
+    white-space: nowrap;
+  }
+
+  .item-label-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  /* ---- Footer ---- */
+  footer {
+    margin-top: 8px;
+    text-align: center;
+  }
+
+  .reset-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--silver);
+    background: transparent;
+    border: 1px solid var(--hairline);
+    padding: 8px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    transition: all 0.15s ease;
+  }
+
+  .reset-btn:hover {
+    color: var(--white);
+    border-color: var(--silver);
+  }
+
+  .complete-banner {
+    margin-top: 18px;
+    padding: 14px;
+    border: 1px solid #3a4a3d;
+    background: #10160f;
+    border-radius: 8px;
+    text-align: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    color: var(--green);
+    letter-spacing: 0.04em;
+    display: none;
+  }
+
+  .complete-banner.show { display: block; }
+
+  .disclaimer {
+    margin-top: 24px;
+    font-size: 11px;
+    color: #565c62;
+    text-align: center;
+    line-height: 1.6;
+    padding: 0 12px;
+  }
+
+  /* ---- Mobile ---- */
+  @media (max-width: 480px) {
+    body { padding: 20px 10px 56px; }
+    header { gap: 14px; }
+    .gauge { width: 68px; height: 68px; }
+    .gauge-num { font-size: 17px; }
+    .gauge-den { font-size: 9px; }
+    .title-block h1 { font-size: 21px; }
+    .title-block p { font-size: 11.5px; }
+    .section { margin-bottom: 16px; }
+    .section-head { padding: 11px 13px; }
+    .section-head h2 { font-size: 14px; letter-spacing: 0.03em; }
+    .item { padding: 13px 13px; }
+    .item-label { font-size: 15px; }
+    .item-note { font-size: 12.5px; }
+    .ambient-plane { width: 54px; height: 27px; }
+    .flyover-plane { width: 44px; height: 22px; top: 12px; }
+    .reset-btn { padding: 10px 22px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="gauge">
+      <svg width="100%" height="100%" viewBox="0 0 84 84">
+        <circle class="track" cx="42" cy="42" r="36" />
+        <circle id="fillRing" class="fill" cx="42" cy="42" r="36"
+                stroke-dasharray="226.19" stroke-dashoffset="226.19" />
+      </svg>
+      <div class="gauge-label">
+        <div class="gauge-num" id="gaugeNum">0</div>
+        <div class="gauge-den" id="gaugeDen">/ 0</div>
+      </div>
+    </div>
+    <div class="title-block">
+      <h1>PREFLIGHT CHECKLIST</h1>
+      <p>Personal safety review · single-engine GA</p>
+    </div>
+    <div class="ambient-plane" id="ambientPlane" aria-hidden="true"></div>
+  </header>
+
+  <div id="sections"></div>
+
+  <div class="complete-banner" id="completeBanner">
+    ALL ITEMS CHECKED — CLEARED FOR ENGINE START
+  </div>
+
+  <footer>
+    <button class="reset-btn" id="resetBtn">RESET CHECKLIST</button>
+  </footer>
+
+  <p class="disclaimer">
+    This is a personal-discipline supplement, not a substitute for your POH,
+    the FAA-required checklist for your aircraft, or a CFI's guidance.
+  </p>
+
+  <div class="takeoff-plane" id="takeoffPlane" aria-hidden="true"></div>
+
+</div>
+
+<script>
+const DATA = [
+  {
+    tag: "01",
+    name: "Personal & Go/No-Go",
+    items: [
+      { label: "I am current and proficient for these conditions, not just legal", note: "Recency ≠ proficiency — be honest with yourself", critical: true },
+      { label: "IMSAFE check: Illness, Medication, Stress, Alcohol, Fatigue, Emotion", note: "Any red flag here is grounds to scrub the flight", critical: true },
+      { label: "I have a firm personal minimum for weather and I will hold it", critical: true },
+      { label: "Someone on the ground knows my route and expected return time" }
+    ]
+  },
+  {
+    tag: "02",
+    name: "Weather & Airspace",
+    items: [
+      { label: "Full weather briefing pulled — METARs, TAFs, winds aloft" },
+      { label: "NOTAMs and TFRs checked along the entire route" },
+      { label: "I have an escape plan if VFR conditions deteriorate", note: "Turn back or divert early — don't press into marginal VFR", critical: true },
+      { label: "Density altitude calculated for departure and destination" }
+    ]
+  },
+  {
+    tag: "03",
+    name: "Fuel & Weight",
+    items: [
+      { label: "Fuel visually confirmed in tanks, not just gauge-checked", critical: true },
+      { label: "Reserve fuel exceeds legal minimum for planned conditions", note: "Plan to land with more than the 30/45-minute minimum" },
+      { label: "Weight and balance calculated for this load, this flight" },
+      { label: "Fuel is correct grade, free of water and contamination" }
+    ]
+  },
+  {
+    tag: "04",
+    name: "Aircraft Walkaround",
+    items: [
+      { label: "Full walkaround complete using the POH checklist" },
+      { label: "Control surfaces free, correct, and undamaged" },
+      { label: "Oil level, color, and condition checked" },
+      { label: "Tires, brakes, and landing gear inspected" },
+      { label: "Fuel sumps drained and checked clear of water" }
+    ]
+  },
+  {
+    tag: "05",
+    name: "Documents & Equipment",
+    items: [
+      { label: "Airworthiness and registration on board" },
+      { label: "Pilot certificate and current medical on board" },
+      { label: "ELT armed and battery date current" },
+      { label: "Survival/emergency gear appropriate for terrain and route" }
+    ]
+  }
+];
+
+const container = document.getElementById('sections');
+const state = {};
+
+// Side-profile Cessna 150: high wing + strut, tricycle gear, swept tail,
+// prop disc + spinning blade, red anti-collision beacon on the fin.
+const PLANE_SVG = `
+  <svg class="c150" viewBox="0 0 120 60" fill="none">
+    <ellipse class="prop-disc" cx="107.5" cy="28.5" rx="2.6" ry="18.5"/>
+    <line class="prop-blade" x1="107.5" y1="10.5" x2="107.5" y2="46.5"/>
+    <path d="M103,26.5 Q99,23.5 94,23 L86,14.5 L64,14.5 Q57,15 54,20 L27,24.5 L12,6.5 Q9.5,5 9,7.5 L4.5,24 Q4,26.5 7,27.5 Q26,31.5 54,36.5 L90,37 Q99,36.5 102,32 Q104.5,29.5 103,26.5 Z"/>
+    <path class="wing" d="M52,16 L92,13.5 L92.5,16 L53,19 Z"/>
+    <path class="stab" d="M1.5,26.5 L24,25.5 L24.5,27.5 L3,29 Z"/>
+    <line class="strut" x1="62" y1="35" x2="78" y2="18"/>
+    <path class="glass" d="M66,16.5 L83,16.5 L86.5,21.5 L64,21.5 Z"/>
+    <line class="gear-leg" x1="68" y1="37" x2="74" y2="48"/>
+    <circle class="wheel" cx="75" cy="50" r="4"/>
+    <line class="gear-leg" x1="96" y1="36.5" x2="96" y2="47"/>
+    <circle class="wheel" cx="96" cy="50" r="3.6"/>
+    <circle class="spinner" cx="104.5" cy="28.5" r="2.4"/>
+    <circle class="beacon" cx="10.5" cy="5.5" r="1.9"/>
+  </svg>`;
+
+DATA.forEach((section, sIdx) => {
+  section.items.forEach((_, iIdx) => { state[`${sIdx}-${iIdx}`] = false; });
+
+  const sectionEl = document.createElement('div');
+  sectionEl.className = 'section';
+  sectionEl.id = `section-${sIdx}`;
+
+  const plane = document.createElement('div');
+  plane.className = 'flyover-plane';
+  plane.id = `plane-${sIdx}`;
+  plane.setAttribute('aria-hidden', 'true');
+  plane.style.animationDelay = `${sIdx * 4}s`;
+  plane.innerHTML = PLANE_SVG;
+  sectionEl.appendChild(plane);
+
+  const head = document.createElement('div');
+  head.className = 'section-head';
+  head.innerHTML = `
+    <div class="section-head-left">
+      <span class="section-tag">${section.tag}</span>
+      <h2>${section.name}</h2>
+    </div>
+    <span class="section-count" id="count-${sIdx}">0/${section.items.length}</span>
+  `;
+  sectionEl.appendChild(head);
+
+  const itemsEl = document.createElement('div');
+  itemsEl.className = 'items';
+
+  section.items.forEach((item, iIdx) => {
+    const row = document.createElement('div');
+    row.className = 'item' + (item.critical ? ' critical' : '');
+    row.id = `item-${sIdx}-${iIdx}`;
+    row.innerHTML = `
+      <div class="checkbox">
+        <svg viewBox="0 0 12 12" fill="none">
+          <path d="M1.5 6L4.5 9L10.5 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="item-text">
+        <div class="item-label-row">
+          <span class="item-label">${item.label}</span>
+          ${item.critical ? '<span class="critical-flag">CRITICAL</span>' : ''}
+        </div>
+        ${item.note ? `<div class="item-note">${item.note}</div>` : ''}
+      </div>
+    `;
+    row.addEventListener('click', () => toggleItem(sIdx, iIdx));
+    itemsEl.appendChild(row);
+  });
+
+  sectionEl.appendChild(itemsEl);
+  container.appendChild(sectionEl);
+});
+
+document.getElementById('ambientPlane').innerHTML = PLANE_SVG;
+const takeoffEl = document.getElementById('takeoffPlane');
+takeoffEl.innerHTML = PLANE_SVG;
+takeoffEl.addEventListener('animationend', () => takeoffEl.classList.remove('fly'));
+
+const totalItems = Object.keys(state).length;
+const fillRing = document.getElementById('fillRing');
+const CIRC = 226.19;
+
+function toggleItem(sIdx, iIdx) {
+  const key = `${sIdx}-${iIdx}`;
+  state[key] = !state[key];
+  const row = document.getElementById(`item-${sIdx}-${iIdx}`);
+  row.classList.toggle('checked', state[key]);
+  updateCounts();
+}
+
+const sectionComplete = {};
+let allComplete = false;
+
+function updateCounts() {
+  let totalChecked = 0;
+  DATA.forEach((section, sIdx) => {
+    let sectionChecked = 0;
+    section.items.forEach((_, iIdx) => {
+      if (state[`${sIdx}-${iIdx}`]) { sectionChecked++; totalChecked++; }
+    });
+    document.getElementById(`count-${sIdx}`).textContent = `${sectionChecked}/${section.items.length}`;
+
+    const isComplete = sectionChecked === section.items.length;
+    if (isComplete && !sectionComplete[sIdx]) {
+      // Celebratory pass: restart this section's plane immediately
+      const p = document.getElementById(`plane-${sIdx}`);
+      p.style.animation = 'none';
+      void p.offsetWidth;
+      p.style.animation = '';
+      p.style.animationDelay = '0s';
+    }
+    sectionComplete[sIdx] = isComplete;
+    document.getElementById(`section-${sIdx}`).classList.toggle('complete', isComplete);
+  });
+
+  document.getElementById('gaugeNum').textContent = totalChecked;
+  document.getElementById('gaugeDen').textContent = `/ ${totalItems}`;
+
+  const pct = totalChecked / totalItems;
+  fillRing.style.strokeDashoffset = CIRC - (CIRC * pct);
+  fillRing.style.stroke = pct === 1 ? '#6fae7d' : '#d6dce1';
+
+  document.getElementById('completeBanner').classList.toggle('show', pct === 1);
+
+  if (pct === 1 && !allComplete) {
+    takeoffEl.classList.remove('fly');
+    void takeoffEl.offsetWidth;
+    takeoffEl.classList.add('fly');
+  }
+  allComplete = pct === 1;
+}
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  Object.keys(state).forEach(k => state[k] = false);
+  document.querySelectorAll('.item').forEach(el => el.classList.remove('checked'));
+  document.querySelectorAll('.flyover-plane').forEach((p, i) => {
+    p.style.animation = '';
+    p.style.animationDelay = `${i * 4}s`;
+  });
+  updateCounts();
+});
+
+updateCounts();
+</script>
+</body>
+</html>
